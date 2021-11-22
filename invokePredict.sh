@@ -13,7 +13,7 @@ REQDATE=$1
 echo "[invokeExtract] -- Configuring environment..."
 
 # load config files
-source tideGen.conf
+source ./tideGen.conf
 source ~/.bash_anaconda_3.8
 
 # modules
