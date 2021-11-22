@@ -70,7 +70,7 @@ for LON in $(seq ${MIN_LON} ${LON_STEP} ${MAX_LON}); do
 	        sleep 5
 	        BJOBS=$(bjobs -o "job_name" -noheader| grep tides_${REQDATE} | grep -v grep | wc -l)       
 	    done
-	    bsub -R "span[ptile=1]" -q p_short -P 0496 -J tides_${REQDATE}_${COUNTER} "python ${MAKEDAT} --startDate=$REQDATE --endDate=$REQDATE --outname=${WORK_PATH}/frontex_${LAT}_${LON} --boundingBox=${dw_lon},${dw_lat},${up_lon},${up_lat} --dx=0.1 --dy=0.1"
+	    bsub -R "span[ptile=1]" -q ${LSF_QUEUE} -P ${LSF_PROJECT} -J tides_${REQDATE}_${COUNTER} "python ${MAKEDAT} --startDate=$REQDATE --endDate=$REQDATE --outname=${WORK_PATH}/frontex_${LAT}_${LON} --boundingBox=${dw_lon},${dw_lat},${up_lon},${up_lat} --dx=0.1 --dy=0.1"
         
     done
 done
@@ -150,7 +150,7 @@ for LON in $(seq ${MIN_LON} ${LON_STEP} ${MAX_LON}); do
 	        sleep 5
 	        BJOBS=$(bjobs -o "job_name" -noheader| grep tides_${REQDATE} | grep -v grep | wc -l)       
 	    done
-	    bsub -R "span[ptile=1]" -q p_short -P 0496 -J tides_${REQDATE}_${COUNTER} "$SCRIPT_EXE < $WORK_PATH/setup_frontex_${LAT}_${LON}"
+	    bsub -R "span[ptile=1]" -q ${LSF_QUEUE} -P ${LSF_PROJECT} -J tides_${REQDATE}_${COUNTER} "$SCRIPT_EXE < $WORK_PATH/setup_frontex_${LAT}_${LON}"
 
     done    
 done
@@ -189,7 +189,7 @@ for INFILE in $(ls ${WORK_PATH}/frontex*.out) ; do
 	    BJOBS=$(bjobs -o "job_name" -noheader| grep tides_${REQDATE} | grep -v grep | wc -l)       
     done
     echo $INFILE
-    bsub -R "span[ptile=1]" -q p_short -P 0496 -J tides_${REQDATE}_${COUNTER} "sh ${SCRIPT_PATH}/process_single_output.sh $INFILE $REQDATE $CLEAN"
+    bsub -R "span[ptile=1]" -q ${LSF_QUEUE} -P ${LSF_PROJECT} -J tides_${REQDATE}_${COUNTER} "sh ${SCRIPT_PATH}/process_single_output.sh $INFILE $REQDATE $CLEAN"
 
     # increment counter
     COUNTER=$(echo "$COUNTER + 1" | bc -l)
@@ -220,7 +220,7 @@ for i in $(seq -w 0 23); do
     done
     
     # invoke python unify
-    bsub -R "span[ptile=1]" -q p_short -P 0496 -J tides_${REQDATE}_${COUNTER} "python ${SCRIPT_PATH}/unify.py $i ${WORK_PATH} ${OUTPUT_PATH}"
+    bsub -R "span[ptile=1]" -q ${LSF_QUEUE} -P ${LSF_PROJECT} -J tides_${REQDATE}_${COUNTER} "python ${SCRIPT_PATH}/unify.py $i ${WORK_PATH} ${OUTPUT_PATH}"
     sleep 5
     
     # increment counter
