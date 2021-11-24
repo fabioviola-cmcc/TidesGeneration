@@ -237,6 +237,23 @@ done
 
 #############################################################
 #
+# SET T AXIS
+#
+#############################################################
+
+for HOUR in $(seq -w 0 23); do
+
+    YEAR=${REQDATE:0:4}
+    MONTH=${REQDATE:4:2}
+    DAY=${REQDATE:6:2}
+    
+    cdo -r -f nc settaxis,$YEAR-$MONTH-$DAY,$HOUR:00:00,1day ${OUTPUT_PATH}/FINAL_${HOUR}.nc ${OUTPUT_PATH}/${HOUR}.nc 
+    mv ${OUTPUT_PATH}/$HOUR.nc ${OUTPUT_PATH}/FINAL_${HOUR}.nc
+done
+
+
+#############################################################
+#
 # FINAL CLEAN
 #
 #############################################################
